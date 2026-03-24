@@ -11,5 +11,10 @@ create table if not exists public.contact_submissions (
 -- Recommended: enable row-level security for client access safety.
 alter table public.contact_submissions enable row level security;
 
--- Inserts should happen through the secure API route using the service role key.
--- If you later allow direct inserts with anon key, create an explicit insert policy.
+drop policy if exists "Allow anonymous contact inserts" on public.contact_submissions;
+
+create policy "Allow anonymous contact inserts"
+on public.contact_submissions
+for insert
+to anon
+with check (source = 'portfolio_web');
