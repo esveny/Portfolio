@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description:
     "Portfolio of Brandon Esveny Brenes Arias, a Computer Systems Engineer focused on full-stack web development and practical digital products.",
    icons: {
-    icon: "/favicon.svg",
+    icon: "/favicon.png",
   },
     openGraph: {
     title: "Brandon Esveny Brenes Arias | Portfolio",
