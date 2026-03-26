@@ -14,6 +14,7 @@ export type ProjectItem = {
   contribution: string;
   tags: string[];
   demoUrl?: string;
+  demoLabel?: string;
   repoUrl?: string;
   status: "Live" | "In Progress" | "Case Study";
 };
@@ -57,6 +58,18 @@ export const experiences: ExperienceItem[] = [
     ]
   },
   {
+    role: "Full-Stack Developer (ERP Team Project)",
+    organization: "Collaborative ERP Platform",
+    location: "Remote",
+    engagement: "Academic Portfolio Project",
+    period: "Mar 2026 - Present",
+    highlights: [
+      "Co-developing an all-in-one ERP platform to centralize business operations, customer service automation, and online presence management.",
+      "Building with React and Next.js, using Supabase for relational data modeling, authentication, and realtime workflows.",
+      "Contributing to core modules including inventory, products, sales, invoicing, CRM, stores, and employee administration."
+    ]
+  },
+  {
     role: "Data Digitization Operator",
     organization: "Municipality of Grecia",
     location: "Grecia, Alajuela, Costa Rica",
@@ -71,13 +84,15 @@ export const experiences: ExperienceItem[] = [
 
 export const projects: ProjectItem[] = [
   {
-    title: "Industrial Company Official Web Platform",
+    title: "Website Taller Industrial Brenes y Asociados de Grecia S.A.",
     type: "Featured Production Project",
     summary:
-      "Corporate web application delivered end-to-end for a real business environment, with structured content management and technical SEO foundations.",
+      "I designed and developed a complete web application from scratch using Astro and Tailwind CSS, focused on performance and user experience.",
     contribution:
-      "Owned architecture, development, deployment, and optimization strategy from initial build to production delivery.",
+      "Implemented a secure relational database in Supabase, applied advanced SEO strategies (SSR, meta tags, and structured data), and collaborated directly with the business to transform real operational needs into functional digital solutions.",
     tags: ["Astro", "Tailwind CSS", "Supabase", "SSR", "Schema Markup", "SEO"],
+    demoUrl: "https://tallerindustrialbrenes.com",
+    demoLabel: "Official Site",
     status: "Live"
   },
   {
@@ -92,15 +107,14 @@ export const projects: ProjectItem[] = [
     status: "In Progress"
   },
   {
-    title: "Systems and Data Workflow Case Study",
-    type: "Case Study",
+    title: "Collaborative ERP Platform",
+    type: "Team Product (In Development)",
     summary:
-      "Structured showcase space for a future project combining backend services, relational modeling, and reporting workflows.",
-    // TODO: Replace this card with a real published project once details are finalized.
+      "All-in-one platform to centralize business operations, automate customer support, and build online presence through three connected modules: ERP management, a virtual assistant chatbot, and a website builder.",
     contribution:
-      "TODO: Document architecture decisions, implementation scope, and technical tradeoffs after project launch.",
-    tags: ["Backend", "Databases", "Power BI", "API Design"],
-    status: "Case Study"
+      "Co-developing with a 3-person team using React + Next.js, Supabase (PostgreSQL/Auth/Realtime), and Figma. Scope includes inventory, sales, invoicing, CRM, store and employee management, plus standards for naming conventions, theming, and scalable architecture.",
+    tags: ["Next.js", "React", "Supabase", "PostgreSQL", "ERP", "Chatbot", "Website Builder"],
+    status: "In Progress"
   }
 ];
 
