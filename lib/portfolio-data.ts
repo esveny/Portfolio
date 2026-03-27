@@ -46,6 +46,18 @@ export const aboutSummary =
 
 export const experiences: ExperienceItem[] = [
   {
+    role: "Full-Stack Developer (TCU Educational Platform)",
+    organization: "Escuela Jose Manuel Peralta Quesada (TCU Program)",
+    location: "Peralta, Grecia, Costa Rica",
+    engagement: "Volunteer Service",
+    period: "Sep 2025 - Present",
+    highlights: [
+      "Building an academic support web platform for students focused on study habits, productivity, and autonomous learning.",
+      "Implemented an educational AI chat with ethical guardrails that prevents direct homework answers and promotes method-based guidance.",
+      "Developed conversation sharing, reminder workflows, and study-habit tracking to reinforce specific student improvement goals."
+    ]
+  },
+  {
     role: "Full-Stack Web Developer",
     organization: "Taller Industrial Brenes y Asociados de Grecia S.A.",
     location: "Grecia, Alajuela, Costa Rica",
@@ -83,6 +95,16 @@ export const experiences: ExperienceItem[] = [
 ];
 
 export const projects: ProjectItem[] = [
+  {
+    title: "TCU Academic Support and Study Productivity Platform",
+    type: "Community Impact Project",
+    summary:
+      "Web platform built for the TCU program at Escuela Jose Manuel Peralta Quesada, focused on helping students study better with guided AI support, structured habits, and academic organization tools.",
+    contribution:
+      "Developed an educational AI chat with strict guardrails that avoids direct homework answers and instead teaches strategies, methods, and planning. Implemented conversation history with secure share links, reminder workflows, and a study habits area where students define specific improvement goals so the system can reinforce them through timely follow-ups.",
+    tags: ["Astro", "TypeScript", "Tailwind CSS", "Supabase", "OpenAI API", "Educational AI", "Study Habits", "Reminders"],
+    status: "Case Study"
+  },
   {
     title: "Website Taller Industrial Brenes y Asociados de Grecia S.A.",
     type: "Featured Production Project",

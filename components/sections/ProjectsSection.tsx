@@ -63,11 +63,6 @@ export function ProjectsSection() {
                     {project.demoLabel ?? "Live Demo"}
                   </a>
                 ) : null}
-                {!project.repoUrl && !project.demoUrl ? (
-                  <span className="inline-flex items-center rounded-full border border-dashed border-border px-4 py-2 text-xs text-muted">
-                    Link pending
-                  </span>
-                ) : null}
               </div>
             </article>
           </Reveal>
