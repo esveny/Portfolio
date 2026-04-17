@@ -1,11 +1,12 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { getSupabaseAdminClient } from "@/lib/supabaseAdmin";
-import { contactSchema } from "@/lib/validation";
+import { contactSubmissionSchema } from "@/lib/validation";
+import { verifyRecaptchaToken } from "@/lib/recaptcha";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const parsed = contactSchema.safeParse(body);
+    const parsed = contactSubmissionSchema.safeParse(body);
 
     if (!parsed.success) {
       return NextResponse.json(
@@ -14,6 +15,14 @@ export async function POST(request: Request) {
         },
         { status: 400 }
       );
+    }
+
+    const forwardedFor = request.headers.get("x-forwarded-for");
+    const ipAddress = forwardedFor ? forwardedFor.split(",")[0]?.trim() : null;
+    const recaptchaResult = await verifyRecaptchaToken(parsed.data.recaptchaToken, ipAddress);
+
+    if (!recaptchaResult.ok) {
+      return NextResponse.json({ error: recaptchaResult.error }, { status: 403 });
     }
 
     const supabase = getSupabaseAdminClient();
@@ -27,9 +36,6 @@ export async function POST(request: Request) {
         { status: 503 }
       );
     }
-
-    const forwardedFor = request.headers.get("x-forwarded-for");
-    const ipAddress = forwardedFor ? forwardedFor.split(",")[0]?.trim() : null;
 
     const { error } = await supabase.from("contact_submissions").insert({
       name: parsed.data.name,

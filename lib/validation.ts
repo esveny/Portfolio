@@ -14,4 +14,9 @@ export const contactSchema = z.object({
     .max(1200, "Message is too long.")
 });
 
+export const contactSubmissionSchema = contactSchema.extend({
+  recaptchaToken: z.string().min(1, "Please complete the reCAPTCHA challenge.")
+});
+
 export type ContactInput = z.infer<typeof contactSchema>;
+export type ContactSubmissionInput = z.infer<typeof contactSubmissionSchema>;

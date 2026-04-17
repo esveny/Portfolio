@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Script from "next/script";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/ui/Reveal";
 import { SectionShell } from "@/components/ui/SectionShell";
@@ -9,11 +10,23 @@ import { contactSchema, type ContactInput } from "@/lib/validation";
 
 type FormErrors = Partial<Record<keyof ContactInput, string>>;
 
+declare global {
+  interface Window {
+    grecaptcha?: {
+      ready(callback: () => void): void;
+      execute(siteKey: string, options: { action: string }): Promise<string>;
+    };
+  }
+}
+
 const initialState: ContactInput = {
   name: "",
   email: "",
   message: ""
 };
+
+const recaptchaSiteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY?.trim();
+const recaptchaAction = "contact_submit";
 
 export function ContactSection() {
   const [form, setForm] = useState<ContactInput>(initialState);
@@ -76,6 +89,26 @@ export function ContactSection() {
     return false;
   };
 
+  const getRecaptchaToken = async () => {
+    if (!recaptchaSiteKey) {
+      throw new Error("Contact protection is not configured yet.");
+    }
+
+    const grecaptcha = window.grecaptcha;
+    if (!grecaptcha) {
+      throw new Error("reCAPTCHA is still loading. Please try again in a moment.");
+    }
+
+    return await new Promise<string>((resolve, reject) => {
+      grecaptcha.ready(() => {
+        grecaptcha
+          .execute(recaptchaSiteKey, { action: recaptchaAction })
+          .then(resolve)
+          .catch(() => reject(new Error("Unable to verify reCAPTCHA. Please try again.")));
+      });
+    });
+  };
+
   const onSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -85,10 +118,11 @@ export function ContactSection() {
     setServerError(null);
 
     try {
+      const recaptchaToken = await getRecaptchaToken();
       const response = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+        body: JSON.stringify({ ...form, recaptchaToken })
       });
 
       const payload = (await response.json()) as { error?: string };
@@ -115,6 +149,9 @@ export function ContactSection() {
       description="Open to internships, junior engineering roles, and freelance collaborations."
       className="pb-28"
     >
+      {recaptchaSiteKey ? (
+        <Script src={`https://www.google.com/recaptcha/api.js?render=${recaptchaSiteKey}`} strategy="afterInteractive" />
+      ) : null}
       <div className="grid gap-6 lg:grid-cols-5">
         <Reveal className="lg:col-span-2">
           <article className="group relative h-full overflow-hidden rounded-2xl border border-border/75 bg-surface/75 p-7 shadow-card transition duration-300 hover:-translate-y-1 hover:border-accent/35 hover:bg-surface/85">
@@ -237,10 +274,11 @@ export function ContactSection() {
             {success ? (
               <p className="mt-4 text-sm text-emerald-300">Message sent successfully. I will get back to you soon.</p>
             ) : null}
+            {!recaptchaSiteKey ? <p className="mt-4 text-sm text-rose-300">Contact protection is not configured yet.</p> : null}
 
             <button
               type="submit"
-              disabled={submitting}
+              disabled={submitting || !recaptchaSiteKey}
               className="mt-6 inline-flex items-center rounded-full border border-accent/50 bg-accent px-6 py-3 text-sm font-semibold text-white transition hover:bg-[#4622bf] disabled:cursor-not-allowed disabled:opacity-70"
             >
               {submitting ? "Sending..." : "Send Message"}
